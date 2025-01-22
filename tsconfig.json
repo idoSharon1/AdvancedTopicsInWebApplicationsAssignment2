@@ -1,0 +1,22 @@
+{
+    "compilerOptions": {
+      "baseUrl": ".", // Base directory for resolving paths
+      "paths": {
+        "@app/*": ["app/*"],
+        "@routes/*": ["app/routes/*"],
+        "@config/": ["app/config/*"],
+        "@db/": ["app/db/*"]
+      },
+      "module": "ESNext",
+      "target": "ES6",
+      "moduleResolution": "node",
+      "outDir": "dist",
+      "rootDir": "./",
+      "esModuleInterop": true,
+      "strict": true,
+      "sourceMap": true
+    },
+    "include": ["app/**/*", "index.ts"],
+    "exclude": ["node_modules", "dist"]
+  }
+  

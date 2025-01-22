@@ -1,0 +1,43 @@
+{
+  "name": "advanced-topics-in-web-applications-assignment-1",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "build": "tsc && tsc-alias",
+    "test": "tsc && jest --detectOpenHandles --forceExit",
+    "start": "tsc && tsc-alias && node dist/index.js",
+    "lint": "eslint . --ext .ts",
+    "devstart": "nodemon --exec ts-node ./index.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Gal-Jacob/AdvancedTopicsInWebApplicationsAssignment1.git"
+  },
+  "author": "gal yaakov and ido sharon",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Gal-Jacob/AdvancedTopicsInWebApplicationsAssignment1/issues"
+  },
+  "homepage": "https://github.com/Gal-Jacob/AdvancedTopicsInWebApplicationsAssignment1#readme",
+  "keywords": [],
+  "description": "",
+  "dependencies": {
+    "body-parser": "^1.20.3",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.1",
+    "mongoose": "^8.8.3"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.18.0",
+    "@types/express": "^4.17.21",
+    "@types/node": "^22.10.7",
+    "eslint": "^9.18.0",
+    "globals": "^15.14.0",
+    "nodemon": "^3.1.9",
+    "ts-node": "^10.9.2",
+    "tsc-alias": "^1.8.10",
+    "typescript": "^5.7.3",
+    "typescript-eslint": "^8.21.0"
+  }
+}

@@ -1,0 +1,60 @@
+# ----------------------------- Posts Routes -----------------------------
+
+# Create: Add a New Post
+POST http://localhost:3000/posts/New
+Content-Type: application/json
+{
+  "title": "My First Post",
+  "description": "This is the description of my first post.",
+  "senderId": "12345"
+}
+
+# Read: Get All Posts
+GET http://localhost:3000/posts/all
+Content-Type: application/json
+
+# Read: Get a Post by ID
+GET http://localhost:3000/posts/{id}
+Content-Type: application/json
+
+# Read: Get Posts by Sender
+GET http://localhost:3000/posts/senderId/{senderId}
+Content-Type: application/json
+
+# Update: Update a Post by ID
+PUT http://localhost:3000/posts/{id}
+Content-Type: application/json
+{
+  "name": "Updated Post Title",
+  "description": "Updated description for the post."
+}
+
+# ---------------------------- Comments Routes ----------------------------
+
+# Create: Add a New Comment
+POST http://localhost:3000/comments/New
+Content-Type: application/json
+{
+  "postId": "60b8d4ff4f1a2c6f8f1f1a12",
+  "text": "This is a comment on the post.",
+  "senderId": "67890"
+}
+
+# Read: Get All Comments
+GET http://localhost:3000/comments/all
+Content-Type: application/json
+
+# Read: Get a Comment by ID
+GET http://localhost:3000/comments/{id}
+Content-Type: application/json
+
+# Read: Get Comments by Sender
+GET http://localhost:3000/comments/senderId/{senderId}
+Content-Type: application/json
+
+# Update: Update a Comment by ID
+PUT http://localhost:3000/comments/{id}
+Content-Type: application/json
+{
+  "text": "Updated comment text."
+}
