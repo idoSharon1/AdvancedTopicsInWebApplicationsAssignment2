@@ -1,95 +1,163 @@
-import express, {Request, Response} from 'express';
-import PostModel from '../db/models/PostModel.js'
-
-const postRouter = express.Router();
-
-// Create: Add a New Post
-postRouter.post('/New', async (req: Request, res: Response) => {
-    try {
-        const { title, description, senderId } = req.body; //Body Schema
-        if (!title || !description || !senderId) { //Check if schma is valid
-            return res.status(400).json({ error: 'title and description are required' });
-        }
-
-        const newPost = new PostModel({ title, description, senderId });
-        res.status(201).json(await newPost.save());
-    } catch (error: unknown) {
-        if (error instanceof Error) {
-            res.status(500).json({ error: error.message });
-        } else {
-            res.status(500).json({ error: 'An unknown error occurred' });
-        }
-    }
-});
-
-// Read: Get All Posts
-postRouter.get('/all', async (req: Request, res: Response) => {
-    try {
-        const items = await PostModel.find();
-        res.json(items);
-    } catch (error: unknown) {
-        if (error instanceof Error) {
-            res.status(500).json({ error: error.message });
-        } else {
-            res.status(500).json({ error: 'An unknown error occurred' });
-        }
-    }});
-
-// Read: Get a Post by ID
-postRouter.get('/:id', async (req: Request, res: Response) => {
-    try {
-        const post = await PostModel.findById(req.params.id);
-        if (!post) {
-            return res.status(404).json({ error: 'Post not found' });
-        }
-        res.json(post);
-    } catch (error: unknown) {
-        if (error instanceof Error) {
-            res.status(500).json({ error: error.message });
-        } else {
-            res.status(500).json({ error: 'An unknown error occurred' });
-        }
-    }
-});
-
-// Read: Get Posts by Sender
-postRouter.get('/senderId/:senderId', async (req: Request, res: Response) => {
-    try {
-        const Posts = await PostModel.find({senderId: req.params.senderId});
-        if (!Posts) {
-            return res.status(404).json({ error: 'Posts not found' });
-        }
-        res.json(Posts);
-    } catch (error: unknown) {
-        if (error instanceof Error) {
-            res.status(500).json({ error: error.message });
-        } else {
-            res.status(500).json({ error: 'An unknown error occurred' });
-        }
-    }
-});
-
-// Update: Update an item by ID
-postRouter.put('/:id', async (req: Request, res: Response) => {
-    try {
-        const { name, description } = req.body;
-        const updatedItem = await PostModel.findByIdAndUpdate(
-            req.params.id,
-            { name, description },
-            { new: true, runValidators: true }
-        );
-        if (!updatedItem) {
-            return res.status(404).json({ error: 'Item not found' });
-        }
-        res.json(updatedItem);
-    } catch (error: unknown) {
-        if (error instanceof Error) {
-            res.status(500).json({ error: error.message });
-        } else {
-            res.status(500).json({ error: 'An unknown error occurred' });
-        }
-    }
-});
+import express from "express";
+const router = express.Router();
+import postsController from "./../controllers/postController.js";
+import { authMiddleware } from "./../controllers/authController.js";
 
 
-export default postRouter;
+/**
+* @swagger
+* tags:
+*   name: Posts
+*   description: The Posts API
+*/
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Post:
+ *       type: object
+ *       required:
+ *         - title
+ *         - content
+ *       properties:
+ *         _id:
+ *           type: string
+ *           description: The auto-generated id of the post
+ *         title:
+ *           type: string
+ *           description: The title of the post
+ *         content:
+ *           type: string
+ *           description: The content of the post
+ *         owner:
+ *           type: string
+ *           description: The owner id of the post
+ *       example:
+ *         _id: 245234t234234r234r23f4
+ *         title: My First Post
+ *         content: This is the content of my first post.
+ *         author: 324vt23r4tr234t245tbv45by
+ */
+
+/**
+ * @swagger
+ * /posts:
+ *   get:
+ *     summary: Get all posts
+ *     description: Retrieve a list of all posts
+ *     tags:
+ *       - Posts
+ *     responses:
+ *       200:
+ *         description: A list of posts
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Post'
+ *       500:
+ *         description: Server error
+ */
+router.get("/", postsController.getAll.bind(postsController));
+
+/**
+ * @swagger
+ * /posts/{id}:
+ *   get:
+ *     summary: Get a post by ID
+ *     description: Retrieve a single post by its ID
+ *     tags:
+ *       - Posts
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The ID of the post
+ *     responses:
+ *       200:
+ *         description: A single post
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Post'
+ *       404:
+ *         description: Post not found
+ *       500:
+ *         description: Server error
+ */
+router.get("/:id", postsController.getById.bind(postsController));
+
+
+/**
+ * @swagger
+ * /posts:
+ *   post:
+ *     summary: Create a new post
+ *     description: Create a new post
+ *     tags:
+ *       - Posts
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               title:
+ *                 type: string
+ *                 description: The title of the post
+ *               content:
+ *                 type: string
+ *                 description: The content of the post
+ *             required:
+ *               - title
+ *               - content
+ *     responses:
+ *       201:
+ *         description: Post created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Post'
+ *       400:
+ *         description: Invalid input
+ *       500:
+ *         description: Server error
+ */
+router.post("/", authMiddleware, postsController.create.bind(postsController));
+
+
+/**
+ * @swagger
+ * posts/{id}:
+ *   delete:
+ *     summary: Delete a post by ID
+ *     description: Delete a single post by its ID
+ *     tags:
+ *       - Posts
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The ID of the post
+ *     responses:
+ *       200:
+ *         description: Post deleted successfully
+ *       404:
+ *         description: Post not found
+ *       500:
+ *         description: Server error
+ */
+router.delete("/:id", authMiddleware, postsController.deleteItem.bind(postsController));
+
+export default router;
