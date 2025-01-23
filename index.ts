@@ -1,10 +1,10 @@
 //gal-yaakov-323858381-ido-sharon-324182716
 
-//TODO : add jest to the project
-//TODO : update rest.rest file
-// TODO : add swagger docs in thecomments router
+// Done : add swagger docs in the comments router
+// Done : add swagger docs in the auth router
+// Done : update rest.rest file
+// TODO : add jest to the project
 // TODO : check if i did anything he wanted
-// TODO : i know the code is shit i copied most of iut from class repo.
 // TODO : try to fix that .js import maybe cannot work without it for some reason
 
 import express from 'express';
@@ -40,9 +40,9 @@ const options = {
     definition: {
       openapi: "3.0.0",
       info: {
-        title: "Web Dev 2025 REST API",
+        title: "Web Dev 2025 REST API Assigment",
         version: "1.0.0",
-        description: "REST server including authentication using JWT",
+        description: "Ido & Gal.",
       },
       servers: [{ url: `http://localhost:${config().app.appPort}`, },],
     },

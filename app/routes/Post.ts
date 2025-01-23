@@ -1,16 +1,17 @@
 import express from "express";
 const router = express.Router();
 import postsController from "./../controllers/postController.js";
-import { authMiddleware } from "./../controllers/authController.js";
+import { authMiddleware } from "@app/utils/auth.js";
 
-
+// swagger title
 /**
 * @swagger
 * tags:
 *   name: Posts
-*   description: The Posts API
+*   description: The Posts routes
 */
 
+//swagger Post schema
 /**
  * @swagger
  * components:
